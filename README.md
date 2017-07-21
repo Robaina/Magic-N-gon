@@ -1,6 +1,6 @@
 # Magic-N-gon
 Solving the Magic N-gon
-This repository contains the R code of two functions desinged to solve and explore the "magic n-gon"
+This repository contains the R code of two functions designed to solve and explore the "magic n-gon"
 The Magic N-gon is a mathematical puzzle inspired by the challenge proposed by the Plus Magazine:
 https://plus.maths.org/content/magic-19
 It contains two programs, the first one, MagicPolygon, tries to find a solution to the problem
