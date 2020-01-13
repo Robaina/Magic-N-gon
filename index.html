@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="A math game where one has to locate numbers in a graph such that the three numbers in each graph edge must add up to a specified quantity. It's solved with an integer linear program. Represented with Cytoscape.js">
+    <meta name="keywords" content="magic n-gon, milp, integer linear program">
+    <meta name="author" content="Semidán Robaina Estévez">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Magic-Gon</title>
+    <!-- <link rel="icon" type="image/png" href="favicon.ico"> -->
+    <script src="glpk.min.js"></script>
+    <!-- <script src="cytoscape.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+
+    <!-- Sets $ as inline MathJax symbols -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        processEscapes: true
+      }
+      });
+    </script>
+
+    <!-- Allows MathJax in the document-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=default" async></script>
+  </head>
+
+  <body>
+    
+    <h1>The N-Gon game</h1>
+    <p>The sum of three nodes in each edge must add up to $3n + 4$, where $n$ is the number of vertices of the polygon.</p>
+
+    <div id="graph-container">
+      <div class="graph" id="cy"></div>
+    </div>
+
+    <script src="ilp.js"></script>
+
+  </body>
+</html>

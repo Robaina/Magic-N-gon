@@ -1,0 +1,13 @@
+#cy {
+  width: 50vmax;
+  height: 50vmax;
+  margin-left: calc( (100vw - 50vmax) / 2 );
+  padding: 0%;
+  margin-bottom: 0vh;
+  margin-top: 5vh;
+  /* z-index: 4; */
+  /* background-color: rgb(106, 158, 207); */
+  border-width: 50px;
+  border-color: rgb(51, 51, 51);
+  border-radius: 15%;
+}
