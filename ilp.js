@@ -1,68 +1,171 @@
 // Build MILP
-let n = 6; // n > 3
-const number_of_vertices = 3 * n + 1;
-const number_triplets = createNumberTriplets(n);
-const number_seq = range(0, number_of_vertices);
-const triple_sum = number_of_vertices + 3;
-const initial_vertex = 3 * n + 1; // starting indexing at 1
-const initial_label = 4;
+let n; // n > 3
+let number_of_vertices = 3 * n + 1;
+let number_triplets = createNumberTriplets(n);
+let number_seq = range(0, number_of_vertices);
+let triple_sum = number_of_vertices + 3;
+let initial_vertex = 3 * n + 1; // starting indexing at 1
+let initial_label = 2;
+let solution = null;
+let cy;
+
+// let graphContainer = document.getElementById("cy");
+// let graphStyle = [
+//   {
+//     selector: 'node',
+//     style: {
+//         'label': 'data(label)',
+//         'width': '40px',
+//         'height': '40px',
+//         'color': 'white',
+//         'background-color': 'black',
+//         'font-size': 14,
+//         'text-halign': 'center',
+//         'text-valign': 'center'
+//     }
+//   },
+//
+//   {
+//     selector: 'edge',
+//     style: {
+//         'width': '4px',
+//         'line-color': 'grey',
+//         'target-arrow-color': 'grey',
+//         // 'target-arrow-shape': 'triangle',
+//         // 'control-point-step-size': '20px',
+//     }
+//   }
+// ];
+// let graphData = createGraphJSON(number_of_vertices, number_triplets, solution);
+//
+// let cy = cytoscape({
+//   container: graphContainer,
+//   elements: graphData,
+//   style: graphStyle,
+//   userZoomingEnabled: false,
+//   autoungrabify: true,
+//   userPanningEnabled: false
+// });
+//
+// cy.layout({name: "circle"}).run();
+//
+// let graphContainerWidth = parseFloat(
+//   getComputedStyle(graphContainer).width.replace("px", ""));
+// let graphContainerHeight = parseFloat(
+//   getComputedStyle(graphContainer).height.replace("px", ""));
+//
+// positionNgonVertices(cy, n,
+//   0.9 * graphContainerWidth, 0.9 * graphContainerHeight, x_offset=20, y_offset=20);
+//
+// positionNgonMiddlePoints(cy, n);
+//
+// positionNgonInnerMiddlePoints(cy, n);
 
 
-// Solve milp
-let solution = solveMILP();
+function addSolutionToNodesLabel(cy, solution) {
+  let nodes = cy.nodes().each(function(node, i) {
+    node.data().label = solution[i];
+    console.log(node.data().label);
+  });
+}
 
-let graphContainer = document.getElementById("cy");
-let graphStyle = [
-  {
-    selector: 'node',
-    style: {
-        'label': 'data(label)',
-        'width': '40px',
-        'height': '40px',
-        'color': 'white',
-        'background-color': 'black',
-        'font-size': 14,
-        'text-halign': 'center',
-        'text-valign': 'center'
+function initializeGraph(n=6) {
+  number_of_vertices = 3 * n + 1;
+  number_triplets = createNumberTriplets(n);
+  number_seq = range(0, number_of_vertices);
+  triple_sum = number_of_vertices + 3;
+  initial_vertex = 3 * n + 1; // starting indexing at 1
+  initial_label = 2;
+  solution = null;
+
+  let graphContainer = document.getElementById("cy");
+  let graphStyle = [
+    {
+      selector: 'node',
+      style: {
+          'label': 'data(label)',
+          'width': '40px',
+          'height': '40px',
+          'color': 'white',
+          'background-color': 'black',
+          'font-size': 14,
+          'text-halign': 'center',
+          'text-valign': 'center'
+      }
+    },
+
+    {
+      selector: 'edge',
+      style: {
+          'width': '4px',
+          'line-color': 'grey',
+          'target-arrow-color': 'grey',
+          // 'target-arrow-shape': 'triangle',
+          // 'control-point-step-size': '20px',
+      }
     }
-  },
+  ];
+  let graphData = createGraphJSON(number_of_vertices, number_triplets, solution);
 
-  {
-    selector: 'edge',
-    style: {
-        'width': '4px',
-        'line-color': 'grey',
-        'target-arrow-color': 'grey',
-        'target-arrow-shape': 'triangle',
-        'control-point-step-size': '20px',
-        // 'curve-style': 'unbundled-bezier'
-    }
-  }
-];
-let graphData = createGraphJSON(number_of_vertices, number_triplets, solution);
+  cy = cytoscape({
+    container: graphContainer,
+    elements: graphData,
+    style: graphStyle,
+    userZoomingEnabled: false,
+    autoungrabify: true,
+    userPanningEnabled: false
+  });
 
-let cy = cytoscape({
-  container: graphContainer,
-  elements: graphData,
-  style: graphStyle,
-  userZoomingEnabled: false,
-  autoungrabify: false,
-  userPanningEnabled: false
-});
+  cy.layout({name: "circle"}).run();
 
-cy.layout({name: "circle"}).run();
+  let graphContainerWidth = parseFloat(
+    getComputedStyle(graphContainer).width.replace("px", ""));
+  let graphContainerHeight = parseFloat(
+    getComputedStyle(graphContainer).height.replace("px", ""));
 
-let graphContainerWidth = parseFloat(
-  getComputedStyle(graphContainer).width.replace("px", ""));
-let graphContainerHeight = parseFloat(
-  getComputedStyle(graphContainer).height.replace("px", ""));
+  positionNgonVertices(cy, n,
+    0.9 * graphContainerWidth, 0.9 * graphContainerHeight, x_offset=20, y_offset=20);
+  positionNgonMiddlePoints(cy, n);
+  positionNgonInnerMiddlePoints(cy, n);
 
-positionNgonVertices(cy, n,
-  0.9 * graphContainerWidth, 0.9 * graphContainerHeight, x_offset=20, y_offset=20);
+}
 
-positionNgonMiddlePoints(cy, n);
+function displayGraph() {
+  cy.layout({name: "circle"}).run();
 
-positionNgonInnerMiddlePoints(cy, n);
+  let graphContainerWidth = parseFloat(
+    getComputedStyle(graphContainer).width.replace("px", ""));
+  let graphContainerHeight = parseFloat(
+    getComputedStyle(graphContainer).height.replace("px", ""));
+
+  positionNgonVertices(cy, n,
+    0.9 * graphContainerWidth, 0.9 * graphContainerHeight, x_offset=20, y_offset=20);
+  positionNgonMiddlePoints(cy, n);
+  positionNgonInnerMiddlePoints(cy, n);
+}
+
+
+function solveGame() {
+  let solution = solveMILP();
+  addSolutionToNodesLabel(cy, solution);
+  initializeGraph(n=6);
+}
+
+function set4Gon() {
+  // n = 4;
+  initializeGraph(n=4);
+}
+function set5Gon() {
+  // n = 5;
+  initializeGraph(n=5);
+}
+function set6Gon() {
+  // n = 6;
+  initializeGraph(n=6);
+}
+
+// solveGame();
+
 
 /* Now we can position nodes with relative units (0 - 1) with respect to
 graph container */

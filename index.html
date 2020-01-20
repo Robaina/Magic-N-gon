@@ -28,13 +28,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=default" async></script>
   </head>
 
-  <body>
-    
+  <body onload="set6Gon()">
+
     <h1>The N-Gon game</h1>
     <p>The sum of three nodes in each edge must add up to $3n + 4$, where $n$ is the number of vertices of the polygon.</p>
 
+    <div class="button-container">
+      <button type="button" name="button" id="four-button" class="button" onclick="set4Gon()">4-gon</button>
+      <button type="button" name="button" id="five-button" class="button" onclick="set5Gon()">5-gon</button>
+      <button type="button" name="button" id="six-button" class="button" onclick="set6Gon()">6-gon</button>
+    </div>
+
     <div id="graph-container">
       <div class="graph" id="cy"></div>
+    </div>
+
+    <div class="button-container">
+      <button type="button" name="button" id="solve-button" class="button" onclick="solveGame()">Solve!</button>
     </div>
 
     <script src="ilp.js"></script>
