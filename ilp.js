@@ -44,7 +44,7 @@ function initializeGraph(n=6, solution=null,
       }
     }
   ];
-  let graphData = createGraphJSON(number_of_vertices, number_triplets, solution);
+  let graphData = createGraphJSON(number_of_vertices, number_triplets, solution, initial_vertex, initial_label);
 
   cy = cytoscape({
     container: graphContainer,
@@ -55,6 +55,7 @@ function initializeGraph(n=6, solution=null,
     userPanningEnabled: false
   });
 
+  //cy.$(`#n${initial_vertex}`).data().label = initial_label;
   cy.layout({name: "circle"}).run();
 
   let graphContainerWidth = parseFloat(
@@ -69,23 +70,28 @@ function initializeGraph(n=6, solution=null,
 
 }
 
-
 function solveGame() {
   solution = solveMILP();
-  initializeGraph(n, solution);
+  initializeGraph(n, solution, initial_vertex, initial_label);
 }
 
 function set4Gon() {
   n = 4;
-  initializeGraph(n, initial_vertex=3 * n + 1, initial_label=3);
+  initial_vertex = 3 * n + 1;
+  initial_label = 3;
+  initializeGraph(n, null, initial_vertex, initial_label);
 }
 function set5Gon() {
   n = 5;
-  initializeGraph(n, initial_vertex=3 * n + 1, initial_label=4);
+  initial_vertex = 3 * n + 1;
+  initial_label = 4;
+  initializeGraph(n, null, initial_vertex, initial_label);
 }
 function set6Gon() {
   n = 6;
-  initializeGraph(n, initial_vertex=3 * n + 1, initial_label=2);
+  initial_vertex = 3 * n + 1;
+  initial_label = 2;
+  initializeGraph(n, null, initial_vertex, initial_label);
 }
 
 
@@ -323,18 +329,24 @@ function range(start, end, step=1) {
   return array;
 }
 
-function createGraphJSON(number_of_vertices, triplets, solution=null) {
+function createGraphJSON(number_of_vertices, triplets, solution=null,
+  initial_vertex=null, initial_label=null) {
   /* Creates graph data structure */
   let data = [];
   // add nodes
   for (let i=0 ; i<number_of_vertices; i++) {
+
     let label;
     let id = `n${i + 1}`;
     if (solution !== null) {
       label = solution[i];
+    } else if (initial_vertex !== null && initial_vertex === i + 1) {
+        label = initial_label;
     } else {
-      label = id;
+      // label = id;
+      label = "";
     }
+
     let new_node = {"data": {"id": id,
                              "label": label,
                              "position": {x: 100, y: 200}
