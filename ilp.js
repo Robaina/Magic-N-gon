@@ -8,6 +8,10 @@ let initial_vertex;
 let initial_label;
 let solution;
 let cy;
+let subtitleContainer = document.getElementById("what-to-do");
+
+window.onload = set6Gon;
+window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
@@ -79,19 +83,30 @@ function set4Gon() {
   n = 4;
   initial_vertex = 3 * n + 1;
   initial_label = 3;
+  subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
 }
 function set5Gon() {
   n = 5;
   initial_vertex = 3 * n + 1;
   initial_label = 4;
+  subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
 }
 function set6Gon() {
   n = 6;
   initial_vertex = 3 * n + 1;
   initial_label = 2;
+  subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
+}
+
+function resizeGraph() {
+  initializeGraph(n, solution, initial_vertex, initial_label);
+}
+
+function setSubTitle(n) {
+  return `Position the numbers from 1 to ${3*n + 1} such that the sum of three nodes in each edge adds up to ${3*n + 4}.`
 }
 
 

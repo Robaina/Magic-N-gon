@@ -9,10 +9,8 @@
     <title>Magic-Gon</title>
     <!-- <link rel="icon" type="image/png" href="favicon.ico"> -->
     <script src="glpk.min.js"></script>
-    <!-- <script src="cytoscape.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <!-- <link rel="stylesheet" href="styles.css"> -->
 
     <!-- Sets $ as inline MathJax symbols -->
     <script type="text/x-mathjax-config">
@@ -28,15 +26,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=default" async></script>
   </head>
 
-  <body onload="set6Gon()">
+  <body> <!--onload="set6Gon()"-->
 
-    <h1>The N-Gon game</h1>
-    <p>The sum of three nodes in each edge must add up to $3n + 4$, where $n$ is the number of vertices of the polygon.</p>
-
-    <div class="button-container">
-      <button type="button" name="button" id="four-button" class="button" onclick="set4Gon()">4-gon</button>
-      <button type="button" name="button" id="five-button" class="button" onclick="set5Gon()">5-gon</button>
-      <button type="button" name="button" id="six-button" class="button" onclick="set6Gon()">6-gon</button>
+    <div id="title-container">
+      <h1 id="title">The n-Gon game</h1>
     </div>
 
     <div id="graph-container">
@@ -44,8 +37,42 @@
     </div>
 
     <div class="button-container">
+      <button type="button" name="button" id="four-button" class="button" onclick="set4Gon()">4-gon</button>
+      <button type="button" name="button" id="five-button" class="button" onclick="set5Gon()">5-gon</button>
+      <button type="button" name="button" id="six-button" class="button" onclick="set6Gon()">6-gon</button>
       <button type="button" name="button" id="solve-button" class="button" onclick="solveGame()">Solve!</button>
     </div>
+
+    <article id="about">
+      <h2 style="text-align: center;">What to do?</h2>
+
+      <p id="what-to-do">The sum of three nodes in each edge must add up to $3n + 4$, where $n$ is the number of vertices of the polygon.</p>
+
+      <p>Click on "Solve!" to solve the Sudoku game, and on "Reset" to clear the grid and start again. The grid is filled with a sample Sudoku game, just reset the game and introduce the initial number clues of the Sudoku game you want to solve. Click on any cell to edit its content. You can also type any initial clues you like as long as they satisfy the Sudoku rules, but be aware that, in that case, the solution may not me unique.</p>
+
+      <h2 style="text-align: center;">How does it work?</h2>
+
+      <p>The rules to solve a <a href="https://en.wikipedia.org/wiki/Sudoku">Sudoku</a> game are simple, fill in the empty cells with numbers from 1 to 9 such that: (<i>i</i>) each row and column in the grid contains all numbers from 1 to 9 and (<i>ii</i>) each square in the grid also contains all numbers from 1 to 9. A number of <a href="https://en.wikipedia.org/wiki/Sudoku_solving_algorithms">algorithms</a> are able to solve most Sudoku games efficiently. Here, we implement a constraint-based approach in which we transform the Sudoku game into an <a href="https://en.wikipedia.org/wiki/Integer_programming">Integer Linear Program</a> (ILP). An ILP optimizes a linear objective function over a feasible domain, which is defined by a set of linear constraints, plus the addition that all variables must have integer values. Thus, solving the Sudoku game translates to finding a feasible solution to our ILP.</p>
+
+      <p>Each cell in the Sudoku grid, situated in row $i$ and column $j$ has 9 binary variables assigned: $x_{ijn} \;\,\forall n \in {1,...,9}$. These variables represent all possible values that a cell can have, for instance, if the cell in the first row and first column on the grid has a value of 1, then $x_{111} = 1$. After defining the binary variables, it isn't hard to define an ILP whose solution will be a Sudoku solution:</p>
+
+      <div id="ilp">
+        <p>
+          $\max\limits_{x} \; 0$ <br>
+          s.t. <br>
+          <br>
+          $\sum\limits_{n=1}^{9} x_{ijn} = 1 \;\; \,\forall i,j \;\; (1)$ <br>
+          $\sum\limits_{j=1}^{9} x_{ijn} = 1 \;\; \,\forall i,n \;\; (2)$ <br>
+          $\sum\limits_{i=1}^{9} x_{ijn} = 1 \;\; \,\forall j,n \;\; (3)$ <br>
+          $\sum\limits_{i,j \in \; \text{S}} x_{ijn} = 1 \;\; \,\forall \; \text{S} \;,n \;\; (4)$ <br>
+          $x_{ijn} = 1 \;\; \,\forall i,j,n \in \text{I} \;\; (5)$
+        </p>
+      </div>
+
+      <p>The constraints in this ILP define the feasible Sudoku solution space. Specifically, the constraints in (1) guarantee that each cell in the grid gets only one number $n$ assigned, the constraints in (2) and in (3) restrict rows and columns, respectively, to have all numbers from 1 to 9 and the constraints in (4) guarantee that all squares (S) in the grid contain all numbers from 1 to 9. Finally, the constraints in (5) enforce the initial clues that you typed in before solving. To this end, it constraints each variable in the set of initial clues $\text{I}$ to have a value of 1, for instance, in the sample Sudoku, the cell in the first row and the second column has a value of 2, hence $x_{112} = 1 \,$ is included in the set of constraints in (5).</p>
+
+      <p>As a side note, in this case we not care about the objective function of the ILP, here set to maximize a constant! This is because a <a href="https://en.wikipedia.org/wiki/Mathematics_of_Sudoku">proper Sudoku game</a>, that is, one with the correct set of initial clues, has only one possible solution. Therefore, the feasible space defined by all constraints, including the proper initial clues, contains only one solution, and the optimization of any objective function will render it as a result. However, if an insufficient number of initial clues is given, the feasible space can contain more than one solution. In this case, the algorithm behind the ILP solver&mdash;<a href="http://hgourvest.github.io/glpk.js/">Glpk.js</a> in this case&mdash;will retrieve the first feasible solution it encounters.</p>
+    </article>
 
     <script src="ilp.js"></script>
 
