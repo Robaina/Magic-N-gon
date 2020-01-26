@@ -162,6 +162,7 @@ class InteractiveNode {
     this.div.style["border-radius"] = "50%";
     this.div.style["background-color"] = this.color;
     this.div.style.color = this.numberColor;
+    this.div.style["font-size"] = "1.5em";
     this.div.style["text-align"] = "center";
     this.div.style["vertical-align"] = "middle";
     this.div.style["line-height"] = `${this.size}px`;
