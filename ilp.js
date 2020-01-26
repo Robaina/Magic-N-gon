@@ -8,6 +8,9 @@ let initial_vertex;
 let initial_label;
 let solution;
 let cy;
+let interactiveNodes;
+let initial_conditions;
+let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
 
 window.onload = set6Gon;
@@ -16,19 +19,18 @@ window.onresize = resizeGraph;
 
 function initializeGraph(n=6, solution=null,
   initial_vertex=null, initial_label=null) {
+
   number_of_vertices = 3 * n + 1;
   number_triplets = createNumberTriplets(n);
   number_seq = range(0, number_of_vertices);
   triple_sum = number_of_vertices + 3;
-
-  let graphContainer = document.getElementById("cy");
   let graphStyle = [
     {
       selector: 'node',
       style: {
-          'label': 'data(label)',
-          'width': '40px',
-          'height': '40px',
+          // 'label': 'data(label)',
+          'width': '10px',
+          'height': '10px',
           'color': 'white',
           'background-color': 'black',
           'font-size': 14,
@@ -48,7 +50,7 @@ function initializeGraph(n=6, solution=null,
       }
     }
   ];
-  let graphData = createGraphJSON(number_of_vertices, number_triplets, solution, initial_vertex, initial_label);
+  let graphData = createGraphJSON(number_of_vertices, number_triplets, solution);
 
   cy = cytoscape({
     container: graphContainer,
@@ -58,8 +60,6 @@ function initializeGraph(n=6, solution=null,
     autoungrabify: true,
     userPanningEnabled: false
   });
-
-  //cy.$(`#n${initial_vertex}`).data().label = initial_label;
   cy.layout({name: "circle"}).run();
 
   let graphContainerWidth = parseFloat(
@@ -72,15 +72,42 @@ function initializeGraph(n=6, solution=null,
   positionNgonMiddlePoints(cy, n);
   positionNgonInnerMiddlePoints(cy, n);
 
+  interactiveNodes = positionInteractiveNodes(
+    number_of_vertices, size=40, color="black");
+  interactiveNodes[`n${initial_vertex}`].setNumber(initial_label);
+
 }
 
 function solveGame() {
-  solution = solveMILP();
-  initializeGraph(n, solution, initial_vertex, initial_label);
+
+  initial_conditions = {};
+  Object.entries(interactiveNodes).map(function(elem) {
+    let id = elem[0];
+    let node = elem[1];
+    let number = node.getNumber();
+    if (number !== "") {
+      initial_conditions[id] = parseInt(number);
+    }
+  });
+
+  solution = solveMILP(initial_conditions);
+
+  if (solution !== "invalid") {
+    Object.entries(interactiveNodes).map(elem => elem[1].remove());
+    initializeGraph(n, solution, initial_vertex, initial_label);
+    Object.entries(interactiveNodes).map(function(elem) {
+      let id = elem[0];
+      let node = elem[1];
+      node.setNumber(solution[id]);
+    });
+  }
 }
 
 function set4Gon() {
   n = 4;
+  if (interactiveNodes !== undefined) {
+    Object.entries(interactiveNodes).map(node => node[1].remove());
+  }
   initial_vertex = 3 * n + 1;
   initial_label = 3;
   subtitleContainer.innerText = setSubTitle(n);
@@ -88,6 +115,9 @@ function set4Gon() {
 }
 function set5Gon() {
   n = 5;
+  if (interactiveNodes !== undefined) {
+    Object.entries(interactiveNodes).map(node => node[1].remove());
+  }
   initial_vertex = 3 * n + 1;
   initial_label = 4;
   subtitleContainer.innerText = setSubTitle(n);
@@ -95,6 +125,9 @@ function set5Gon() {
 }
 function set6Gon() {
   n = 6;
+  if (interactiveNodes !== undefined) {
+    Object.entries(interactiveNodes).map(node => node[1].remove());
+  }
   initial_vertex = 3 * n + 1;
   initial_label = 2;
   subtitleContainer.innerText = setSubTitle(n);
@@ -102,11 +135,64 @@ function set6Gon() {
 }
 
 function resizeGraph() {
+  if (interactiveNodes !== undefined) {
+    Object.entries(interactiveNodes).map(node => node[1].remove());
+  }
   initializeGraph(n, solution, initial_vertex, initial_label);
 }
 
 function setSubTitle(n) {
   return `Position the numbers from 1 to ${3*n + 1} such that the sum of three nodes in each edge adds up to ${3*n + 4}.`
+}
+
+class InteractiveNode {
+
+  constructor(positionX, positionY, size, color, numberColor) {
+    this.posX = positionX;
+    this.posY = positionY;
+    this.size = size;
+    this.color = color || "black";
+    this.numberColor = numberColor || "white";
+    this.div = document.createElement("div");
+    this.div.style.position = "absolute";
+    this.div.style.left = `${positionX - size / 2}px`;
+    this.div.style.top = `${positionY - size / 2}px`;
+    this.div.style.width = `${size}px`;
+    this.div.style.height = `${size}px`;
+    this.div.style["border-radius"] = "50%";
+    this.div.style["background-color"] = this.color;
+    this.div.style.color = this.numberColor;
+    this.div.style["text-align"] = "center";
+    this.div.style["vertical-align"] = "middle";
+    this.div.style["line-height"] = `${this.size}px`;
+    this.div.setAttribute("contenteditable", "true");
+    // this.div.addEventListener("click", selectCell);
+    // this.div.addEventListener("touch", selectCell);
+    document.body.appendChild(this.div);
+  }
+
+  setNumber(number) {
+    this.div.innerText = number;
+  }
+  getNumber() {
+    return this.div.innerText;
+  }
+  remove() {
+    this.div.remove();
+  }
+
+}
+
+function positionInteractiveNodes(n_nodes, size=null, color="black") {
+  let nodes = {};
+  for (let i = 1; i <= n_nodes; i++) {
+    let pos = cy.$(`#n${i}`).renderedPosition();
+    let posX = pos.x + graphContainer.offsetLeft;
+    let posY = pos.y + graphContainer.offsetTop;
+    let node = new InteractiveNode(posX, posY, size, color);
+    nodes[`n${i}`] = node;
+  }
+  return nodes
 }
 
 
@@ -256,13 +342,17 @@ function addInitialCondition(vertex, label) {
   return c_str
 }
 
-function writeConstraints(initial_vertex=null, initial_label=null) {
+function writeConstraints(initial_conditions=null) {
     /* Put all constraints together */
     let constraints_str = "\nSubject To\n";
     constraints_str += addNumberSelectionConstraints()
      + addUniquenessConstraints() + addTripletSumConstraints();
-    if (initial_vertex !== null & initial_label !== null) {
-      constraints_str += addInitialCondition(initial_vertex, initial_label);
+    if (initial_conditions !== null) {
+      Object.entries(initial_conditions).map(function(elem) {
+        let node_idx = parseInt(elem[0].replace("n", ""));
+        let value = elem[1];
+        constraints_str += addInitialCondition(node_idx, value);
+      });
     }
     return constraints_str
 }
@@ -277,11 +367,11 @@ function writeBinaryVariables() {
   return b_str
 }
 
-function solveMILP() {
+function solveMILP(initial_conditions) {
 
   // Prepare model string
   let model_str = "Minimize\n0x_0_0\n"
-   + writeConstraints(initial_vertex, initial_label)
+   + writeConstraints(initial_conditions)
    + writeBinaryVariables()
    + "\nEnd";
 
@@ -306,7 +396,7 @@ function solveMILP() {
       solution[var_name] = value;
 
       // Retrieve numbers for each vertex
-      let vertex_name = var_name.split("_")[1];
+      let vertex_name = "n" + (parseInt(var_name.split("_")[1]) + 1);
       let vertex_label = parseInt(var_name.split("_")[2]) + 1;
       processed_solution[vertex_name] = vertex_label;
     }
@@ -315,7 +405,8 @@ function solveMILP() {
   if (Object.keys(solution).length > 0) {
     return processed_solution
   } else {
-    alert("invalid input!")
+    alert("Wrong, try again!");
+    return "invalid"
   }
 
 }
@@ -344,22 +435,19 @@ function range(start, end, step=1) {
   return array;
 }
 
-function createGraphJSON(number_of_vertices, triplets, solution=null,
-  initial_vertex=null, initial_label=null) {
+function createGraphJSON(number_of_vertices, triplets, solution=null) {
   /* Creates graph data structure */
   let data = [];
   // add nodes
-  for (let i=0 ; i<number_of_vertices; i++) {
+  for (let i=1 ; i<=number_of_vertices; i++) {
 
     let label;
-    let id = `n${i + 1}`;
+    let id = `n${i}`;
     if (solution !== null) {
-      label = solution[i];
-    } else if (initial_vertex !== null && initial_vertex === i + 1) {
-        label = initial_label;
+      label = solution[id];
     } else {
-      // label = id;
-      label = "";
+      label = id;
+      // label = "";
     }
 
     let new_node = {"data": {"id": id,

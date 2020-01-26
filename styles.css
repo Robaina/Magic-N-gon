@@ -2,9 +2,9 @@ html, body {
   background-color: rgb(250, 250, 250);
 }
 #cy {
-  width: 50vh;
-  height: 50vh;
-  margin-left: calc( (100vw - 50vh) / 2 );
+  width: 55vh;
+  height: 55vh;
+  margin-left: calc( (100vw - 55vh) / 2 );
   padding: 0%;
   margin-bottom: 0vh;
   margin-top: 2vh;
@@ -23,18 +23,14 @@ html, body {
 
 }
 .button {
-  /* position: absolute;
-  top: 2vh;
-  left: 5vw; */
   padding: 1vmax;
-  font-size: 2.3vmax;
-  width: 10vmax;
+  font-size: 1.5em;
+  width: auto;
   background-color: rgb(208, 165, 37);
   border: none;
   color: white;
   text-align: center;
   text-decoration: none;
-  /* display: block; */
   margin: 1em 0em;
   cursor: pointer;
   border-radius: 1vmax;
@@ -80,3 +76,9 @@ html, body {
     width: 90vw;
     margin-left: 5vw;
   }
+  #cy {
+    width: 45vh;
+    height: 45vh;
+    margin-left: calc( (100vw - 46vh) / 2 );
+  }
+}
