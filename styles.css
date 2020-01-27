@@ -60,6 +60,7 @@ html, body {
 
 #ilp {
   text-align: center;
+  /* overflow-wrap: break-word; */
 }
 
 a {
