@@ -14,7 +14,7 @@ let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
 
 window.onload = set6Gon;
-// window.onresize = resizeGraph;
+window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
@@ -135,10 +135,13 @@ function set6Gon() {
 }
 
 function resizeGraph() {
-  if (interactiveNodes !== undefined) {
-    Object.entries(interactiveNodes).map(node => node[1].remove());
+  let is_mobile = window.innerWidth < 764;
+  if (!is_mobile) {
+    if (interactiveNodes !== undefined) {
+      Object.entries(interactiveNodes).map(node => node[1].remove());
+    }
+    initializeGraph(n, solution, initial_vertex, initial_label);
   }
-  initializeGraph(n, solution, initial_vertex, initial_label);
 }
 
 function setSubTitle(n) {
