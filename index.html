@@ -58,24 +58,22 @@
 
       <p>Here, I transform Magic 19 into an <a href="https://en.wikipedia.org/wiki/Integer_programming">Integer Linear Program</a> (ILP) &mdash; similarly to what I did to build a <a href="https://robaina.github.io/Sudoku">Sudoku solver</a>. An ILP optimizes a linear objective function over a feasible domain, which is defined by a set of linear constraints, plus the addition that all variables must have integer values. Then, solving the puzzle is a matter of finding a feasible solution to the ILP.</p>
 
-      <!-- <p>Each cell in the Sudoku grid, situated in row $i$ and column $j$ has 9 binary variables assigned: $x_{ijn} \;\,\forall n \in {1,...,9}$. These variables represent all possible values that a cell can have, for instance, if the cell in the first row and first column on the grid has a value of 1, then $x_{111} = 1$. After defining the binary variables, it isn't hard to define an ILP whose solution will be a Sudoku solution:</p>
+      <p>Each node $i \in \{1, \dots, 3*n + 1\}$ in the graph above has $3n + 1$ binary variables assigned: $x_{ij} \;\,\forall j \in {1,\dots,3n + 1}$, where $n$ is the number of vertices of the chosen polygon (i.e. $n=6$ in Magic-19). These variables represent all possible values that a node can have, i.e., all the numbers from 1 to $3n+1$. For instance, if node $i$ has a value of 1, then $x_{11} = 1$. After defining the binary variables, it isn't hard to define an ILP whose solution will be a solution to our puzzle:</p>
 
       <div id="ilp">
         <p>
-          $\max\limits_{x} \; 0$ <br>
+          $\max\limits_{x \in \{0, 1\}} \; 0$ <br>
           s.t. <br>
           <br>
-          $\sum\limits_{n=1}^{9} x_{ijn} = 1 \;\; \,\forall i,j \;\; (1)$ <br>
-          $\sum\limits_{j=1}^{9} x_{ijn} = 1 \;\; \,\forall i,n \;\; (2)$ <br>
-          $\sum\limits_{i=1}^{9} x_{ijn} = 1 \;\; \,\forall j,n \;\; (3)$ <br>
-          $\sum\limits_{i,j \in \; \text{S}} x_{ijn} = 1 \;\; \,\forall \; \text{S} \;,n \;\; (4)$ <br>
-          $x_{ijn} = 1 \;\; \,\forall i,j,n \in \text{I} \;\; (5)$
+          $\sum\limits_{i=1}^{3n+1} x_{ij} = 1 \;\; \,\forall j \in \{1, \dots, 3n + 1\} \;\; (1)$ <br>
+          $\sum\limits_{j=1}^{3n+1} x_{ij} = 1 \;\; \,\forall i \in \{1, \dots, 3n + 1\} \ \;\; (2)$ <br>
+          $\sum\limits_{i \in E} \sum\limits_{j=1}^{3n+1} j x_{ij} = 3n+4 \;\; \,\forall E \;\; (3)$ <br>
         </p>
       </div>
 
-      <p>The constraints in this ILP define the feasible Sudoku solution space. Specifically, the constraints in (1) guarantee that each cell in the grid gets only one number $n$ assigned, the constraints in (2) and in (3) restrict rows and columns, respectively, to have all numbers from 1 to 9 and the constraints in (4) guarantee that all squares (S) in the grid contain all numbers from 1 to 9. Finally, the constraints in (5) enforce the initial clues that you typed in before solving. To this end, it constraints each variable in the set of initial clues $\text{I}$ to have a value of 1, for instance, in the sample Sudoku, the cell in the first row and the second column has a value of 2, hence $x_{112} = 1 \,$ is included in the set of constraints in (5).</p>
+      <p>The constraints in this ILP define the feasible puzzle solution space. Specifically, the constraints in (1) make sure that a unique number is assigned to each node in the graph. The constraints in (2) assign a number from 1 to $3n+1$ to each node. While the constraints in (3) guarantee that the sum of values along each edge $E$ in the graph adds up to $3n + 4$.</p>
 
-      <p>As a side note, in this case we not care about the objective function of the ILP, here set to maximize a constant! This is because a <a href="https://en.wikipedia.org/wiki/Mathematics_of_Sudoku">proper Sudoku game</a>, that is, one with the correct set of initial clues, has only one possible solution. Therefore, the feasible space defined by all constraints, including the proper initial clues, contains only one solution, and the optimization of any objective function will render it as a result. However, if an insufficient number of initial clues is given, the feasible space can contain more than one solution. In this case, the algorithm behind the ILP solver&mdash;<a href="http://hgourvest.github.io/glpk.js/">Glpk.js</a> in this case&mdash;will retrieve the first feasible solution it encounters.</p> -->
+      <p>As a side note, in this case we do not care about the objective function of the ILP, here set to maximize a constant! This is because we only care to find a <em>feasible</em> solution to the problem. Note that introducing a set of initial values does not guarantee that a feasible solution will be found. Only a correct set of initial values will render a feasible solution! Also note that more than one feasible solution exists! Try to find them all, that is, if you dare!</p>
     </article>
 
     <footer>
