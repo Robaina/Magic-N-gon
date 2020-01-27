@@ -58,10 +58,6 @@ html, body {
   font-size: 1.5em;
 }
 
-/* #what-to-do {
-  font-size: 1.2em;
-} */
-
 #ilp {
   text-align: center;
 }
@@ -71,12 +67,10 @@ a {
   color: var(--fancyColor);
 }
 footer {
-  margin-left: 20vw;
+  margin-left: 25vw;
   margin-top: 5vh;
   margin-bottom: 5vh;
-  font-size: 1.5vmax;
-  z-index: 2;
-  /* color: var(--fontColor); */
+  font-size: 1.2em;
 }
 
 ::-webkit-scrollbar {
@@ -113,5 +107,8 @@ footer {
     width: 45vh;
     height: 45vh;
     margin-left: calc( (100vw - 46vh) / 2 );
+  }
+  footer {
+    margin-left: 5vw;
   }
 }
