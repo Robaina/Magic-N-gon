@@ -9,7 +9,8 @@
     <title>Magic-Gon</title>
     <link rel="icon" type="image/png" href="n-gon.png">
     <script src="glpk.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+    <script src="cytoscape.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Anton|Coda" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
     <!-- Sets $ as inline MathJax symbols -->
@@ -26,7 +27,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=default" async></script>
   </head>
 
-  <body> <!--onload="set6Gon()"-->
+  <body>
 
     <div id="title-container">
       <h1 id="title">The n-Gon game</h1>
@@ -72,6 +73,11 @@
 
       <p>As a side note, in this case we not care about the objective function of the ILP, here set to maximize a constant! This is because a <a href="https://en.wikipedia.org/wiki/Mathematics_of_Sudoku">proper Sudoku game</a>, that is, one with the correct set of initial clues, has only one possible solution. Therefore, the feasible space defined by all constraints, including the proper initial clues, contains only one solution, and the optimization of any objective function will render it as a result. However, if an insufficient number of initial clues is given, the feasible space can contain more than one solution. In this case, the algorithm behind the ILP solver&mdash;<a href="http://hgourvest.github.io/glpk.js/">Glpk.js</a> in this case&mdash;will retrieve the first feasible solution it encounters.</p> -->
     </article>
+
+    <footer>
+      <p><a href="https://github.com/Robaina">Semidán Robaina Estévez</a>, 2020. <br/>
+      Using the <a href="https://hgourvest.github.io/glpk.js/">glpk.js</a> library.</p>
+    </footer>
 
     <script src="ilp.js"></script>
 
