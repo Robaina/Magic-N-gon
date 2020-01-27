@@ -58,7 +58,7 @@
 
       <p>Here, I transform Magic 19 into an <a href="https://en.wikipedia.org/wiki/Integer_programming">Integer Linear Program</a> (ILP) &mdash; similarly to what I did to build a <a href="https://robaina.github.io/Sudoku">Sudoku solver</a>. An ILP optimizes a linear objective function over a feasible domain, which is defined by a set of linear constraints, plus the addition that all variables must have integer values. Then, solving the puzzle is a matter of finding a feasible solution to the ILP.</p>
 
-      <p>Each node $i \in \{1, \dots, 3*n + 1\}$ in the graph above has $3n + 1$ binary variables assigned: $x_{ij} \;\,\forall j \in {1,\dots,3n + 1}$, where $n$ is the number of vertices of the chosen polygon (i.e. $n=6$ in Magic-19). These variables represent all possible values that a node can have, i.e., all the numbers from 1 to $3n+1$. For instance, if node $i$ has a value of 1, then $x_{11} = 1$. After defining the binary variables, it isn't hard to define an ILP whose solution will be a solution to our puzzle:</p>
+      <p>Each node $i \in \{1, \dots, 3n + 1\}$ in the graph above has $3n + 1$ binary variables assigned: $x_{ij} \;\,\forall j \in {1,\dots,3n + 1}$, where $n$ is the number of vertices of the chosen polygon (i.e. $n=6$ in Magic-19). These variables represent all possible values that a node can have, i.e., all the numbers from 1 to $3n+1$. For instance, if node $i$ has a value of 1, then $x_{11} = 1$. After defining the binary variables, it isn't hard to define an ILP whose solution will be a solution to our puzzle:</p>
 
       <div id="ilp">
         <p>
