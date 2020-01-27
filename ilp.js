@@ -14,7 +14,7 @@ let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
 
 window.onload = set6Gon;
-window.onresize = resizeGraph;
+// window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
