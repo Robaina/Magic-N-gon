@@ -10,8 +10,6 @@ html, body {
   padding: 0%;
   margin-bottom: 0vh;
   margin-top: 2vh;
-  /* z-index: 4; */
-  /* background-color: rgb(106, 158, 207); */
   border-width: 50px;
   border-color: rgb(51, 51, 51);
   border-radius: 15%;
@@ -60,9 +58,9 @@ html, body {
   font-size: 1.5em;
 }
 
-#what-to-do {
+/* #what-to-do {
   font-size: 1.2em;
-}
+} */
 
 #ilp {
   text-align: center;
