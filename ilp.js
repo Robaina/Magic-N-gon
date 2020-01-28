@@ -148,9 +148,6 @@ function isMobileDevice() {
 };
 
 function resizeGraph() {
-  // // let is_mobile = window.innerWidth < 450;
-  // let is_mobile = window.visualViewport.width < 450;
-  console.log("new function");
   if (!isMobileDevice()) {
     if (interactiveNodes !== undefined) {
       Object.entries(interactiveNodes).map(node => node[1].remove());
