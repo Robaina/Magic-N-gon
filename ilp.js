@@ -22,7 +22,7 @@ document.getElementsByTagName('head')[0].appendChild(meta);
 
 
 window.onload = set6Gon;
-// window.onresize = resizeGraph;
+window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
@@ -143,7 +143,7 @@ function set6Gon() {
 }
 
 function resizeGraph() {
-  let is_mobile = window.innerWidth < 450;
+  let is_mobile = window.outerWidth < 450;
   if (!is_mobile) {
     if (interactiveNodes !== undefined) {
       Object.entries(interactiveNodes).map(node => node[1].remove());
