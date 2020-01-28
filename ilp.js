@@ -22,7 +22,7 @@ document.getElementsByTagName('head')[0].appendChild(meta);
 
 
 window.onload = set6Gon;
-window.onresize = resizeGraph;
+// window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
