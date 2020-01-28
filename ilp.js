@@ -22,7 +22,7 @@ document.getElementsByTagName('head')[0].appendChild(meta);
 
 
 window.onload = set6Gon;
-// window.onresize = resizeGraph;
+window.onresize = resizeGraph;
 
 
 function initializeGraph(n=6, solution=null,
@@ -142,10 +142,16 @@ function set6Gon() {
   initializeGraph(n, null, initial_vertex, initial_label);
 }
 
+function isMobileDevice() {
+   /*https://coderwall.com/p/i817wa/one-line-function-to-detect-mobile-devices-with-javascript*/
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
+
 function resizeGraph() {
-  // let is_mobile = window.innerWidth < 450;
-  let is_mobile = window.visualViewport.width < 450;
-  if (!is_mobile) {
+  // // let is_mobile = window.innerWidth < 450;
+  // let is_mobile = window.visualViewport.width < 450;
+  console.log("new function");
+  if (!isMobileDevice()) {
     if (interactiveNodes !== undefined) {
       Object.entries(interactiveNodes).map(node => node[1].remove());
     }
