@@ -10,6 +10,7 @@ let solution;
 let cy;
 let interactiveNodes;
 let initial_conditions;
+let game_already_solved;
 let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
 
@@ -32,6 +33,7 @@ function initializeGraph(n=6, solution=null,
   number_triplets = createNumberTriplets(n);
   number_seq = range(0, number_of_vertices);
   triple_sum = number_of_vertices + 3;
+  game_already_solved = false;
   let graphStyle = [
     {
       selector: 'node',
@@ -109,6 +111,8 @@ function solveGame() {
       node.setNumber(solution[id]);
     });
   }
+
+  game_already_solved = true;
 }
 
 function set4Gon() {
@@ -418,7 +422,11 @@ function solveMILP(initial_conditions) {
     }
   }
 
+  let fullAnswered = Object.keys(initial_conditions).length === number_of_vertices;
   if (Object.keys(solution).length > 0) {
+    if (fullAnswered && !game_already_solved) {
+      alert("Good job!!")
+    }
     return processed_solution
   } else {
     alert("Wrong, try again!");
