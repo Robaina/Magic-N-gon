@@ -15,7 +15,7 @@ let subtitleContainer = document.getElementById("what-to-do");
 
 /* Avoid resizing due to soft keyboard pop up in android chrome
 https://stackoverflow.com/questions/35769939/how-to-prevent-android-firefox-browser-to-resize-window-when-soft-keyboard-is-on*/
-var meta = document.createElement('meta');
+let meta = document.createElement('meta');
 meta.name = 'viewport';
 meta.content = 'width=device-width,height='+window.innerHeight+', initial-scale=1.0';
 document.getElementsByTagName('head')[0].appendChild(meta);
@@ -143,11 +143,13 @@ function set6Gon() {
 }
 
 function resizeGraph() {
-  // let is_mobile = window.innerWidth < 450;
-  if (interactiveNodes !== undefined) {
-    Object.entries(interactiveNodes).map(node => node[1].remove());
+  let is_mobile = window.innerWidth < 450;
+  if (!is_mobile) {
+    if (interactiveNodes !== undefined) {
+      Object.entries(interactiveNodes).map(node => node[1].remove());
+    }
+    initializeGraph(n, solution, initial_vertex, initial_label);
   }
-  initializeGraph(n, solution, initial_vertex, initial_label);
 }
 
 function setSubTitle(n) {
@@ -177,7 +179,7 @@ class InteractiveNode {
     this.div.style["line-height"] = `${this.size}px`;
     this.div.setAttribute("contenteditable", "true");
     // this.div.addEventListener("click", selectCell);
-    // this.div.addEventListener("touch", selectCell);
+    // this.div.addEventListener("touch", checkIfSoftKeyBoardUp);
     document.body.appendChild(this.div);
   }
 
