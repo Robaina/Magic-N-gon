@@ -13,6 +13,14 @@ let initial_conditions;
 let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
 
+/* Avoid resizing due to soft keyboard pop up in android chrome
+https://stackoverflow.com/questions/35769939/how-to-prevent-android-firefox-browser-to-resize-window-when-soft-keyboard-is-on*/
+var meta = document.createElement('meta');
+meta.name = 'viewport';
+meta.content = 'width=device-width,height='+window.innerHeight+', initial-scale=1.0';
+document.getElementsByTagName('head')[0].appendChild(meta);
+
+
 window.onload = set6Gon;
 window.onresize = resizeGraph;
 
