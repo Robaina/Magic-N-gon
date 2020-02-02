@@ -161,7 +161,7 @@ function resizeGraph() {
 }
 
 function setSubTitle(n) {
-  return `Position the numbers from 1 to ${3*n + 1} such that the sum of three nodes in each edge adds up to ${3*n + 4}.`
+  return `Position all the numbers from 1 to ${3*n + 1}, i.e., without repetition, such that the sum of three nodes in each edge adds up to ${3*n + 4}.`
 }
 
 class InteractiveNode {
