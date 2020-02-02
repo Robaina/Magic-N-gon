@@ -13,6 +13,7 @@ let initial_conditions;
 let game_already_solved;
 let graphContainer = document.getElementById("cy");
 let subtitleContainer = document.getElementById("what-to-do");
+const centerValues = {"4gon": [1, 3], "5gon": [1, 3, 4], "6gon": [2, 4]};
 
 /* Avoid resizing due to soft keyboard pop up in android chrome
 https://stackoverflow.com/questions/35769939/how-to-prevent-android-firefox-browser-to-resize-window-when-soft-keyboard-is-on*/
@@ -115,13 +116,17 @@ function solveGame() {
   game_already_solved = true;
 }
 
+function getRandomElementFromArray(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
 function set4Gon() {
   n = 4;
   if (interactiveNodes !== undefined) {
     Object.entries(interactiveNodes).map(node => node[1].remove());
   }
   initial_vertex = 3 * n + 1;
-  initial_label = 3;
+  initial_label = getRandomElementFromArray(centerValues["4gon"]);
   subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
 }
@@ -131,7 +136,7 @@ function set5Gon() {
     Object.entries(interactiveNodes).map(node => node[1].remove());
   }
   initial_vertex = 3 * n + 1;
-  initial_label = 4;
+  initial_label = getRandomElementFromArray(centerValues["5gon"]);
   subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
 }
@@ -141,7 +146,7 @@ function set6Gon() {
     Object.entries(interactiveNodes).map(node => node[1].remove());
   }
   initial_vertex = 3 * n + 1;
-  initial_label = 2;
+  initial_label = getRandomElementFromArray(centerValues["6gon"]);
   subtitleContainer.innerText = setSubTitle(n);
   initializeGraph(n, null, initial_vertex, initial_label);
 }
@@ -186,8 +191,6 @@ class InteractiveNode {
     this.div.style["vertical-align"] = "middle";
     this.div.style["line-height"] = `${this.size}px`;
     this.div.setAttribute("contenteditable", "true");
-    // this.div.addEventListener("click", selectCell);
-    // this.div.addEventListener("touch", checkIfSoftKeyBoardUp);
     document.body.appendChild(this.div);
   }
 
